@@ -11,7 +11,7 @@
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=day02",
+                    "--bin=day02_2",
                     "--package=aoc2018"
                 ],
                 "filter": {

@@ -22,7 +22,6 @@ fn main() -> std::io::Result<()> {
         let mut hit_3 = false;
         for i in 0..26 {
             let num_of_letter = letter_counts[i];
-            //println!("{}", num_of_letter);
             if num_of_letter == 2 && !hit_2 {
                 hit_2 = true;
                 num_2s += 1;
