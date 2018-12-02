@@ -7,11 +7,11 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "day01",
+            "name": "day02",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=day01",
+                    "--bin=day02",
                     "--package=aoc2018"
                 ],
                 "filter": {
