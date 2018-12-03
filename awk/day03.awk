@@ -8,7 +8,6 @@
 }
 END {
     for (i = 1; i <= NR; i = i + 1) {
-        #printf("{id: %i, x: %i, y: %i, width: %i height: %i}\n", i, x[i], y[i], width[i], height[i])
         base = y[i] * 1000 + x[i];
         for (h = 0; h < height[i]; h = h + 1) {
             for (w = 0; w < width[i]; w = w + 1) {
