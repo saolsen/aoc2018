@@ -9,10 +9,10 @@ use regex::Regex;
 #[derive(Debug)]
 struct Rect {
     id: i32,
-    x: i32,
-    y: i32,
-    width: i32,
-    height: i32,
+    x: usize,
+    y: usize,
+    width: usize,
+    height: usize,
 }
 
 fn main() -> std::io::Result<()> {
@@ -57,7 +57,7 @@ fn main() -> std::io::Result<()> {
         let i = rect.y * 1000 + rect.x;
         for h in 0..rect.height {
             for w in 0..rect.width {
-                fabric[(i+h*1000+w) as usize] += 1;
+                fabric[i+h*1000+w] += 1;
             }
         }
     }
@@ -75,7 +75,7 @@ fn main() -> std::io::Result<()> {
         let i = rect.y * 1000 + rect.x;
         for h in 0..rect.height {
             for w in 0..rect.width {
-                if fabric[(i+h*1000+w) as usize] != 1 {
+                if fabric[i+h*1000+w] != 1 {
                     continue 'rect;
                 }
             }
