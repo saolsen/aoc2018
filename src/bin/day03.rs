@@ -25,16 +25,15 @@ fn main() -> std::io::Result<()> {
 
     let re = Regex::new(r"#(\d+) @ (\d+),(\d+): (\d+)x(\d+)").unwrap();
     for ref line in input {
-        for cap in re.captures_iter(str::from_utf8(*line).unwrap()) {
-            let rect = Rect {
-                id: cap[1].parse().unwrap(),
-                x: cap[2].parse().unwrap(),
-                y: cap[3].parse().unwrap(),
-                width: cap[4].parse().unwrap(),
-                height: cap[5].parse().unwrap()
-            };
-            rects.push(rect);
-        }
+        let cap = re.captures(str::from_utf8(*line).unwrap()).unwrap();
+        let rect = Rect {
+            id: cap[1].parse().unwrap(),
+            x: cap[2].parse().unwrap(),
+            y: cap[3].parse().unwrap(),
+            width: cap[4].parse().unwrap(),
+            height: cap[5].parse().unwrap()
+        };
+        rects.push(rect);
     }
 
     /*
