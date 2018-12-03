@@ -51,7 +51,7 @@ fn main() -> std::io::Result<()> {
     }
     println!("{},{}", x, y); => 999 x 998
     */
-    
+
     let mut fabric: [i32; 1000*1000] = [0; 1000*1000];
     for rect in &rects {
         let i = rect.y * 1000 + rect.x;
@@ -69,6 +69,20 @@ fn main() -> std::io::Result<()> {
         }
     }
 
-    println!("{}", num_overlapped);
+    println!("num overlapped inches: {}", num_overlapped);
+
+    'rect: for rect in &rects {
+        let i = rect.y * 1000 + rect.x;
+        for h in 0..rect.height {
+            for w in 0..rect.width {
+                if fabric[(i+h*1000+w) as usize] != 1 {
+                    continue 'rect;
+                }
+            }
+        }
+        println!("only non overlapping claim: {}", rect.id);
+        break;
+    }
+
     Ok(())
 }
