@@ -13,18 +13,10 @@ enum Action {
     WakesUp
 }
 
-#[derive(Debug, Copy, Clone)]
-struct Time {
-    month: i32,
-    day: i32,
-    hour: i32,
-    minute: i32,
-}
-
 #[derive(Debug)]
 struct LogRecord {
     id: i32,
-    time: Time,
+    minute: i32,
     action: Action
 }
 
@@ -35,26 +27,6 @@ fn main() -> std::io::Result<()> {
         let mut input = input_buf.split(|i| *i == '\n' as u8).collect::<Vec<&[u8]>>();
         input.sort();
 
-        /* let input : Vec<&[u8]> = vec![
-            b"[1518-11-01 00:00] Guard #10 begins shift",
-            b"[1518-11-01 00:05] falls asleep",
-            b"[1518-11-01 00:25] wakes up",
-            b"[1518-11-01 00:30] falls asleep",
-            b"[1518-11-01 00:55] wakes up",
-            b"[1518-11-01 23:58] Guard #99 begins shift",
-            b"[1518-11-02 00:40] falls asleep",
-            b"[1518-11-02 00:50] wakes up",
-            b"[1518-11-03 00:05] Guard #10 begins shift",
-            b"[1518-11-03 00:24] falls asleep",
-            b"[1518-11-03 00:29] wakes up",
-            b"[1518-11-04 00:02] Guard #99 begins shift",
-            b"[1518-11-04 00:36] falls asleep",
-            b"[1518-11-04 00:46] wakes up",
-            b"[1518-11-05 00:03] Guard #99 begins shift",
-            b"[1518-11-05 00:45] falls asleep",
-            b"[1518-11-05 00:55] wakes up",
-        ]; */
-        
         let line_re = Regex::new(r"\[\d{4}-(\d{2})-(\d{2}) (\d{2}):(\d{2})\] (.*)").unwrap();
         let id_re = Regex::new(r"Guard #(\d+) begins shift").unwrap();
         let mut guard_id: i32 = 0;
@@ -74,12 +46,7 @@ fn main() -> std::io::Result<()> {
             };
             let log_record = LogRecord {
                 id: guard_id,
-                time: Time {
-                    month: cap[1].parse().unwrap(),
-                    day: cap[2].parse().unwrap(),
-                    hour: cap[3].parse().unwrap(),
-                    minute: cap[4].parse().unwrap(),
-                },
+                minute: cap[4].parse().unwrap(),
                 action
             };
 
@@ -97,20 +64,20 @@ fn main() -> std::io::Result<()> {
 
     {
         let mut current_guard_id = 0;
-        let mut fell_asleep_at = Time{month: 0, day: 0, hour: 0, minute: 0};
+        let mut fell_asleep_at = 0;
 
         for record in &records {
             match record.action {
                 Action::FallsAsleep => {
-                    fell_asleep_at = record.time;
+                    fell_asleep_at = record.minute;
                 },
                 Action::WakesUp => {
-                    let mins_asleep = record.time.minute - fell_asleep_at.minute;
+                    let mins_asleep = record.minute - fell_asleep_at;
                     let current_guard_total_mins_asleep = guard_total_mins_asleep.entry(record.id).or_insert(0);
                     *current_guard_total_mins_asleep += mins_asleep;
                     let current_guard_specific_mins_asleep = guard_specific_mins_asleep.entry(record.id).or_insert([0; 60]);
                     for i in 0..mins_asleep {
-                        let minute = fell_asleep_at.minute + i;
+                        let minute = fell_asleep_at + i;
                         current_guard_specific_mins_asleep[minute as usize] += 1;
                     }
                 },
