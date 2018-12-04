@@ -138,7 +138,24 @@ fn main() -> std::io::Result<()> {
         }
     }
 
-    println!("Guard Id: {}, Time Asleep: {}, Sleepiest Minute: {}, Answer: {}", best_sleeper_id, best_sleeper_total_mins_asleep, sleepiest_minute, best_sleeper_id*sleepiest_minute);
+    println!("[Strategy 1] Guard Id: {}, Time Asleep: {}, Sleepiest Minute: {}, Answer: {}", best_sleeper_id, best_sleeper_total_mins_asleep, sleepiest_minute, best_sleeper_id*sleepiest_minute);
+
+    {
+        let mut guard_id = 0;
+        let mut longest_minute = 0;
+        let mut longest_minute_num_nights = 0;
+        for (id, specific_mins_asleep) in guard_specific_mins_asleep {
+            for (minute, num_nights) in specific_mins_asleep.iter().enumerate() {
+                if *num_nights > longest_minute_num_nights {
+                    guard_id = id;
+                    longest_minute = minute as i32;
+                    longest_minute_num_nights = *num_nights;
+                }
+            }
+        }
+
+        println!("[Strategy 2] Guard Id: {}, Sleepiest Minute: {}, Num Nights Asleep On Minute: {}, Answer: {}", guard_id, longest_minute, longest_minute_num_nights, guard_id * longest_minute);
+    }
     
     Ok(())
 }
